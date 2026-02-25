@@ -1,59 +1,54 @@
 // ==========================
-// REPOSITORY - JS PURO
+// REPOSITORY - EN CLASE (JS PURO)
 // ==========================
+class UserRepository {
+    constructor(baseUrl = "https://jsonplaceholder.typicode.com/users") {
+        this.baseUrl = baseUrl;
+    }
 
-let BASE_URL = "https://jsonplaceholder.typicode.com/users";
-
-function getUsers() {
-    return fetch(BASE_URL)
-        .then(function (res) {
+    getUsers() {
+        return fetch(this.baseUrl).then(function (res) {
             if (!res.ok) {
                 throw new Error("Error al obtener usuarios");
             }
             return res.json();
         });
-}
+    }
 
-function createUser(user) {
-    return fetch(BASE_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-    })
-        .then(function (res) {
+    createUser(user) {
+        return fetch(this.baseUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+        }).then(function (res) {
             if (!res.ok) {
                 throw new Error("Error al crear usuario");
             }
             return res.json();
         });
-}
+    }
 
-function updateUser(id, user) {
-    return fetch(BASE_URL + "/" + id, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-    })
-        .then(function (res) {
+    updateUser(id, user) {
+        return fetch(this.baseUrl + "/" + id, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+        }).then(function (res) {
             if (!res.ok) {
                 throw new Error("Error al actualizar usuario");
             }
             return res.json();
         });
-}
+    }
 
-function deleteUser(id) {
-    return fetch(BASE_URL + "/" + id, {
-        method: "DELETE"
-    })
-        .then(function (res) {
+    deleteUser(id) {
+        return fetch(this.baseUrl + "/" + id, {
+            method: "DELETE",
+        }).then(function (res) {
             if (!res.ok) {
                 throw new Error("Error al eliminar usuario");
             }
             return true;
         });
+    }
 }

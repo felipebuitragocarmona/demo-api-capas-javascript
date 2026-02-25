@@ -12,16 +12,20 @@ document.addEventListener("DOMContentLoaded", function () {
     let formTitle = document.getElementById("formTitle");
 
     // ==========================
+    // INSTANCIA DEL REPO
+    // ==========================
+    let repo = new UserRepository("https://jsonplaceholder.typicode.com/users");
+
+    // ==========================
     // CONTROLADOR
     // ==========================
     function listarUsuarios() {
-        getUsers()
+        repo
+            .getUsers()
             .then(function (data) {
-
                 tablaUsuarios.innerHTML = "";
 
                 data.forEach(function (u) {
-
                     let usuario = new User(u.id, u.name, u.username, u.email);
 
                     tablaUsuarios.innerHTML +=
@@ -46,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function asignarEventos(dataOriginal) {
-
         let editarBtns = document.querySelectorAll(".btn-editar");
         let eliminarBtns = document.querySelectorAll(".btn-eliminar");
 
@@ -95,7 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function crearUsuario() {
-
         let usuario = new User(
             null,
             nameInput.value.trim(),
@@ -108,7 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        createUser(usuario)
+        repo
+            .createUser(usuario)
             .then(function () {
                 alert("Usuario creado.");
                 listarUsuarios();
@@ -121,7 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function actualizarUsuario() {
-
         let id = userIdInput.value;
 
         let usuario = new User(
@@ -136,7 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        updateUser(id, usuario)
+        repo
+            .updateUser(id, usuario)
             .then(function () {
                 alert("Usuario actualizado.");
                 listarUsuarios();
@@ -151,7 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function eliminarUsuario(id) {
         if (!confirm("¿Eliminar usuario #" + id + "?")) return;
 
-        deleteUser(id)
+        repo
+            .deleteUser(id)
             .then(function () {
                 alert("Usuario eliminado.");
                 listarUsuarios();
