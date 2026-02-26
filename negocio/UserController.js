@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM cargado");
+
     let btnCrear = document.getElementById("crearUsuario");
     let btnActualizar = document.getElementById("actualizarUsuario");
     let btnListar = document.getElementById("listarUsuarios");
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.forEach(function (u) {
                     let usuario = new User(u.id, u.name, u.username, u.email);
 
+                    // IMPORTANTE: usar window.cargarUsuario / window.eliminarUsuario
                     tablaUsuarios.innerHTML +=
                         "<tr>" +
                         "<td>" + usuario.id + "</td>" +
@@ -35,44 +37,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         "<td>" + usuario.username + "</td>" +
                         "<td>" + usuario.email + "</td>" +
                         "<td>" +
-                        "<button class='btn btn-warning btn-sm btn-editar' data-id='" + usuario.id + "'>Actualizar</button> " +
-                        "<button class='btn btn-danger btn-sm btn-eliminar' data-id='" + usuario.id + "'>Eliminar</button>" +
+                        "<button class='btn btn-warning btn-sm' onclick='cargarUsuario(" + JSON.stringify(u) + ")'>Actualizar</button> " +
+                        "<button class='btn btn-danger btn-sm' onclick='eliminarUsuario(" + usuario.id + ")'>Eliminar</button>" +
                         "</td>" +
                         "</tr>";
                 });
-
-                asignarEventos(data);
             })
             .catch(function (error) {
                 console.error(error);
                 alert("Error al obtener usuarios");
             });
-    }
-
-    function asignarEventos(dataOriginal) {
-        let editarBtns = document.querySelectorAll(".btn-editar");
-        let eliminarBtns = document.querySelectorAll(".btn-eliminar");
-
-        editarBtns.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                let id = btn.getAttribute("data-id");
-
-                let usuario = dataOriginal.find(function (u) {
-                    return String(u.id) === String(id);
-                });
-
-                if (!usuario) return;
-
-                cargarUsuario(usuario);
-            });
-        });
-
-        eliminarBtns.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                let id = btn.getAttribute("data-id");
-                eliminarUsuario(id);
-            });
-        });
     }
 
     function cargarUsuario(usuario) {
@@ -167,11 +141,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================
-    // EVENTOS
+    // EXPONER A WINDOW (PARA ONCLICK)
     // ==========================
-    btnCrear.addEventListener("click", crearUsuario);
-    btnActualizar.addEventListener("click", actualizarUsuario);
-    btnListar.addEventListener("click", listarUsuarios);
+    window.cargarUsuario = cargarUsuario;
+    window.eliminarUsuario = eliminarUsuario;
+
+    // ==========================
+    // EVENTOS (ONCLICK)
+    // ==========================
+    btnCrear.onclick = crearUsuario;
+    btnActualizar.onclick = actualizarUsuario;
+    btnListar.onclick = listarUsuarios;
 
     listarUsuarios();
 });

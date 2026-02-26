@@ -2,7 +2,7 @@
 // REPOSITORY - EN CLASE (JS PURO)
 // ==========================
 class UserRepository {
-    constructor(baseUrl = "https://jsonplaceholder.typicode.com/users") {
+    constructor(baseUrl) {
         this.baseUrl = baseUrl;
     }
 
